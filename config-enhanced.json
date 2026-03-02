@@ -1,0 +1,45 @@
+{
+  "logging": {
+    "level": "INFO",
+    "file": "mcp-email-server-enhanced.log",
+    "maxSize": "5m",
+    "maxFiles": 5
+  },
+  "email": {
+    "smtp": {
+      "host": "smtp.gmail.com",
+      "port": 587,
+      "secure": false,
+      "timeout": 30000,
+      "pool": false,
+      "tls": {
+        "rejectUnauthorized": true,
+        "minVersion": "TLSv1.2"
+      }
+    },
+    "maxRetries": 3,
+    "retryDelay": 60000
+  },
+  "security": {
+    "maxAttempts": 5,
+    "lockoutDuration": 300000,
+    "allowedDomains": ["example.com", "company.com", "test.com"],
+    "rateLimit": 10,
+    "encryptionKey": "change-this-key-in-production",
+    "authToken": "change-this-token-in-production"
+  },
+  "workflow": {
+    "autoApprove": false,
+    "approvalTimeout": 86400000, // 24 hours
+    "archiveAfter": 30, // days
+    "maxFileSize": "10mb",
+    "validPriorities": ["low", "medium", "high", "urgent"],
+    "validCategories": ["general", "business", "technical", "support", "marketing"]
+  },
+  "monitoring": {
+    "enableMetrics": true,
+    "healthCheckInterval": 60000,
+    "maxConcurrentEmails": 5,
+    "emailQueueSize": 100
+  }
+}

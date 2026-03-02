@@ -1,0 +1,432 @@
+"""
+Scheduling Module for Silver Tier AI Employee
+Handles scheduled tasks like CEO Briefing, daily summaries, and periodic cleanups
+
+Integrates with:
+- Windows Task Scheduler
+- cron (Linux/Mac)
+- Python schedule library
+"""
+
+import os
+import sys
+import json
+import logging
+import subprocess
+from pathlib import Path
+from datetime import datetime, timedelta
+from typing import Dict, List, Any, Optional
+import schedule
+import time
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('scheduler.log'),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger('Scheduler')
+
+# Vault paths
+VAULT_BASE = r"C:\Users\goku\MyWebsiteProjects\hackathon-0\Silver-Tier\AI_Silver_Employee_Vault"
+DASHBOARD = Path(VAULT_BASE) / 'Dashboard.md'
+BRIEFINGS = Path(VAULT_BASE) / 'Briefings'
+LOGS = Path(VAULT_BASE) / 'Logs'
+
+# Ensure directories exist
+for directory in [BRIEFINGS, LOGS]:
+    directory.mkdir(parents=True, exist_ok=True)
+
+
+class TaskScheduler:
+    """Manages scheduled tasks for the AI Employee"""
+    
+    def __init__(self):
+        self.tasks = []
+        self.vault_base = Path(VAULT_BASE)
+    
+    def generate_ceo_briefing(self) -> Path:
+        """
+        Generate Monday Morning CEO Briefing
+        
+        This is the standout feature from the hackathon document:
+        - Audits bank transactions and tasks
+        - Reports revenue and bottlenecks
+        - Provides proactive suggestions
+        """
+        logger.info('Generating CEO Briefing...')
+        
+        try:
+            # Gather statistics
+            done_folder = self.vault_base / 'Done'
+            needs_action_folder = self.vault_base / 'Needs_Action'
+            plans_folder = self.vault_base / 'Plans'
+            
+            done_count = len(list(done_folder.glob('*.md')))
+            pending_count = len(list(needs_action_folder.glob('*.md')))
+            plans_count = len(list(plans_folder.glob('*.md')))
+            
+            # Get recent completions
+            recent_files = sorted(
+                done_folder.glob('*.md'),
+                key=lambda f: f.stat().st_mtime,
+                reverse=True
+            )[:10]
+            
+            # Generate briefing content
+            briefing_date = datetime.now().strftime('%Y-%m-%d')
+            week_start = datetime.now() - timedelta(days=7)
+            
+            briefing_content = f"""---
+generated: {datetime.now().isoformat()}
+period: {week_start.strftime('%Y-%m-%d')} to {briefing_date}
+type: weekly_briefing
+---
+
+# Monday Morning CEO Briefing
+
+## Executive Summary
+**Generated**: {briefing_date}
+**Period**: Last 7 days
+
+## Key Metrics
+
+| Metric | Value | Status |
+|--------|-------|--------|
+| Tasks Completed | {done_count} | {'✅ Good' if done_count > 5 else '⚠️ Low'} |
+| Pending Tasks | {pending_count} | {'⚠️ Review Needed' if pending_count > 3 else '✅ Clear'} |
+| Active Plans | {plans_count} | {'📊 Active' if plans_count > 0 else '✅ None'} |
+
+## Completed Tasks This Week
+
+"""
+            # Add recent completions
+            if recent_files:
+                for file in recent_files:
+                    briefing_content += f"- {file.name}\n"
+            else:
+                briefing_content += "*No tasks completed this week*\n"
+            
+            briefing_content += f"""
+
+## Bottlenecks Identified
+
+"""
+            # Analyze pending items
+            pending_files = list(needs_action_folder.glob('*.md'))
+            if pending_files:
+                briefing_content += "| Item | Age | Priority |\n|------|-----|----------|\n"
+                for file in pending_files[:5]:
+                    try:
+                        age_days = (datetime.now() - datetime.fromtimestamp(file.stat().st_ctime)).days
+                        briefing_content += f"| {file.name} | {age_days} days | Medium |\n"
+                    except Exception:
+                        pass
+            else:
+                briefing_content += "*No bottlenecks - all tasks processed*\n"
+            
+            briefing_content += f"""
+
+## Proactive Suggestions
+
+"""
+            # Generate suggestions based on patterns
+            suggestions = self._generate_suggestions(done_count, pending_count, plans_count)
+            for i, suggestion in enumerate(suggestions, 1):
+                briefing_content += f"{i}. {suggestion}\n"
+            
+            briefing_content += f"""
+
+## Upcoming Deadlines
+
+*No upcoming deadlines tracked*
+
+## System Health
+
+- **File Watcher**: {'✅ Running' if self._check_watcher_health() else '⚠️ Check logs'}
+- **Gmail Watcher**: {'✅ Running' if self._check_gmail_watcher() else '⚠️ Not configured'}
+- **MCP Email Server**: {'✅ Running' if self._check_mcp_server() else '⚠️ Check status'}
+- **Orchestrator**: {'✅ Running' if self._check_orchestrator() else '⚠️ Check status'}
+
+---
+*Generated by AI Employee Scheduler v1.0*
+"""
+            
+            # Save briefing
+            briefing_file = BRIEFINGS / f'{briefing_date}_CEO_Briefing.md'
+            briefing_file.write_text(briefing_content, encoding='utf-8')
+            
+            logger.info(f'CEO Briefing generated: {briefing_file.name}')
+            
+            # Update dashboard
+            self._update_dashboard_with_briefing(briefing_file)
+            
+            return briefing_file
+            
+        except Exception as e:
+            logger.error(f'Error generating CEO Briefing: {e}')
+            raise
+    
+    def _generate_suggestions(self, done_count: int, pending_count: int, plans_count: int) -> List[str]:
+        """Generate proactive suggestions based on metrics"""
+        suggestions = []
+        
+        if pending_count > 5:
+            suggestions.append(f"**High pending workload** ({pending_count} items) - Consider processing Needs_Action folder more frequently")
+        
+        if done_count < 3:
+            suggestions.append("**Low task completion** - Review if watchers are detecting items correctly")
+        
+        if plans_count > 5:
+            suggestions.append(f"**Multiple active plans** ({plans_count}) - Ensure Claude is executing plans efficiently")
+        
+        # Always add some standard suggestions
+        suggestions.append("Review approval queue daily to avoid delays")
+        suggestions.append("Check system logs for any errors or warnings")
+        
+        return suggestions[:4]  # Return max 4 suggestions
+    
+    def _update_dashboard_with_briefing(self, briefing_file: Path):
+        """Update Dashboard.md with latest briefing summary"""
+        try:
+            if not DASHBOARD.exists():
+                logger.warning('Dashboard.md not found')
+                return
+            
+            content = DASHBOARD.read_text(encoding='utf-8')
+            
+            # Add briefing link to recent activity
+            briefing_link = f"- [{briefing_file.name}]({briefing_file.relative_to(self.vault_base)})"
+            
+            if '## Recent Briefings' not in content:
+                content += f"\n## Recent Briefings\n\n{briefing_link}\n"
+            else:
+                # Add to existing briefings section
+                content = content.replace(
+                    '## Recent Briefings',
+                    f'## Recent Briefings\n\n{briefing_link}'
+                )
+            
+            DASHBOARD.write_text(content, encoding='utf-8')
+            logger.info('Dashboard updated with briefing')
+            
+        except Exception as e:
+            logger.error(f'Error updating dashboard: {e}')
+    
+    def generate_daily_summary(self) -> Path:
+        """Generate daily summary report"""
+        logger.info('Generating daily summary...')
+        
+        try:
+            done_folder = self.vault_base / 'Done'
+            needs_action_folder = self.vault_base / 'Needs_Action'
+            
+            today = datetime.now().strftime('%Y-%m-%d')
+            
+            # Count today's completions
+            today_completions = 0
+            for file in done_folder.glob('*.md'):
+                try:
+                    mtime = datetime.fromtimestamp(file.stat().st_mtime)
+                    if mtime.date() == datetime.now().date():
+                        today_completions += 1
+                except Exception:
+                    pass
+            
+            summary_content = f"""---
+generated: {datetime.now().isoformat()}
+date: {today}
+type: daily_summary
+---
+
+# Daily Summary - {today}
+
+## Today's Activity
+
+- **Tasks Completed**: {today_completions}
+- **Pending Items**: {len(list(needs_action_folder.glob('*.md')))}
+
+## Summary
+
+"""
+            if today_completions > 0:
+                summary_content += f"Productive day with {today_completions} tasks completed.\n"
+            else:
+                summary_content += "No tasks completed today. Review system status.\n"
+            
+            # Save summary
+            summary_file = LOGS / f'{today}_Daily_Summary.md'
+            summary_file.write_text(summary_content, encoding='utf-8')
+            
+            logger.info(f'Daily summary generated: {summary_file.name}')
+            return summary_file
+            
+        except Exception as e:
+            logger.error(f'Error generating daily summary: {e}')
+            raise
+    
+    def cleanup_old_files(self, retention_days: int = 30):
+        """Clean up old files from Logs and Done folders"""
+        logger.info(f'Cleaning up files older than {retention_days} days...')
+        
+        try:
+            cutoff = datetime.now() - timedelta(days=retention_days)
+            cleaned_count = 0
+            
+            # Clean Logs folder
+            logs_folder = self.vault_base / 'Logs'
+            for file in logs_folder.glob('*.md'):
+                try:
+                    mtime = datetime.fromtimestamp(file.stat().st_mtime)
+                    if mtime < cutoff and 'Daily_Summary' in file.name:
+                        file.unlink()
+                        cleaned_count += 1
+                except Exception:
+                    pass
+            
+            logger.info(f'Cleaned up {cleaned_count} old files')
+            
+        except Exception as e:
+            logger.error(f'Error cleaning up files: {e}')
+    
+    def _check_watcher_health(self) -> bool:
+        """Check if file watcher is healthy"""
+        log_file = Path('file_watcher.log')
+        if log_file.exists():
+            try:
+                mtime = datetime.fromtimestamp(log_file.stat().st_mtime)
+                return (datetime.now() - mtime).total_seconds() < 3600  # Updated in last hour
+            except Exception:
+                return False
+        return False
+    
+    def _check_gmail_watcher(self) -> bool:
+        """Check if Gmail watcher is configured"""
+        creds_file = Path('gmail_credentials.json')
+        return creds_file.exists()
+    
+    def _check_mcp_server(self) -> bool:
+        """Check if MCP server is running"""
+        log_file = Path('mcp-email-server.log')
+        if log_file.exists():
+            try:
+                mtime = datetime.fromtimestamp(log_file.stat().st_mtime)
+                return (datetime.now() - mtime).total_seconds() < 3600
+            except Exception:
+                return False
+        return False
+    
+    def _check_orchestrator(self) -> bool:
+        """Check if orchestrator is running"""
+        log_file = Path('orchestrator.log')
+        if log_file.exists():
+            try:
+                mtime = datetime.fromtimestamp(log_file.stat().st_mtime)
+                return (datetime.now() - mtime).total_seconds() < 3600
+            except Exception:
+                return False
+        return False
+    
+    def setup_scheduled_tasks(self):
+        """Setup all scheduled tasks"""
+        # CEO Briefing - Every Monday at 8:00 AM
+        schedule.every().monday.at("08:00").do(self.generate_ceo_briefing)
+        
+        # Daily Summary - Every day at 6:00 PM
+        schedule.every().day.at("18:00").do(self.generate_daily_summary)
+        
+        # Cleanup - Every Sunday at 2:00 AM
+        schedule.every().sunday.at("02:00").do(self.cleanup_old_files)
+        
+        logger.info('Scheduled tasks configured')
+    
+    def run(self):
+        """Run the scheduler"""
+        logger.info('Starting scheduler...')
+        self.setup_scheduled_tasks()
+        
+        try:
+            while True:
+                schedule.run_pending()
+                time.sleep(60)  # Check every minute
+        except KeyboardInterrupt:
+            logger.info('Scheduler stopped')
+
+
+def create_windows_task_scheduler_entry():
+    """Create Windows Task Scheduler entries"""
+    script_dir = Path(__file__).parent
+    python_exe = sys.executable
+    
+    tasks = [
+        {
+            'name': 'AI_Employee_CEO_Briefing',
+            'trigger': 'WEEKLY',
+            'day': 'MONDAY',
+            'time': '08:00',
+            'action': f'{python_exe} "{script_dir / "scheduler.py"}" --task ceo_briefing'
+        },
+        {
+            'name': 'AI_Employee_Daily_Summary',
+            'trigger': 'DAILY',
+            'time': '18:00',
+            'action': f'{python_exe} "{script_dir / "scheduler.py"}" --task daily_summary'
+        }
+    ]
+    
+    print("Windows Task Scheduler Commands:")
+    print("=" * 60)
+    
+    for task in tasks:
+        if task['trigger'] == 'WEEKLY':
+            cmd = f'schtasks /Create /TN "{task["name"]}" /TR "{task["action"]}" /SC WEEKLY /D {task["day"]} /ST {task["time"]} /RL HIGHEST /F'
+        else:
+            cmd = f'schtasks /Create /TN "{task["name"]}" /TR "{task["action"]}" /SC DAILY /ST {task["time"]} /RL HIGHEST /F'
+        
+        print(f"\n{task['name']}:")
+        print(f"  {cmd}")
+    
+    print("\n" + "=" * 60)
+    print("Run these commands in an elevated Command Prompt")
+
+
+def create_cron_entry():
+    """Create cron entries for Linux/Mac"""
+    script_dir = Path(__file__).parent
+    
+    print("\ncron Entries:")
+    print("=" * 60)
+    print(f"# CEO Briefing - Every Monday at 8:00 AM")
+    print(f"0 8 * * 1 cd {script_dir} && python3 scheduler.py --task ceo_briefing")
+    print(f"\n# Daily Summary - Every day at 6:00 PM")
+    print(f"0 18 * * * cd {script_dir} && python3 scheduler.py --task daily_summary")
+    print("=" * 60)
+    print("Add these to your crontab with: crontab -e")
+
+
+if __name__ == "__main__":
+    import argparse
+    
+    parser = argparse.ArgumentParser(description='AI Employee Scheduler')
+    parser.add_argument('--task', choices=['ceo_briefing', 'daily_summary', 'cleanup', 'run', 'setup'],
+                       default='run', help='Task to run')
+    args = parser.parse_args()
+    
+    scheduler = TaskScheduler()
+    
+    if args.task == 'ceo_briefing':
+        scheduler.generate_ceo_briefing()
+    elif args.task == 'daily_summary':
+        scheduler.generate_daily_summary()
+    elif args.task == 'cleanup':
+        scheduler.cleanup_old_files()
+    elif args.task == 'setup':
+        if sys.platform == 'win32':
+            create_windows_task_scheduler_entry()
+        else:
+            create_cron_entry()
+    else:
+        scheduler.run()

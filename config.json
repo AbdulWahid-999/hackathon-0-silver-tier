@@ -1,0 +1,13 @@
+{
+  "logging": {
+    "level": "INFO",
+    "file": "mcp-email-server.log"
+  },
+  "email": {
+    "smtp": {
+      "host": "smtp.gmail.com",
+      "port": 587,
+      "secure": false
+    }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "ralphWiggumLoop": {
+    "maxIterations": 5,
+    "checkIntervalMs": 5000,
+    "workingDirectory": "C:\\Users\\goku\\MyWebsiteProjects\\hackathon-0\\Silver-Tier",
+    "taskCompletePromise": "TASK_COMPLETE",
+    "logFilePath": "mcp-email-server.log",
+    "doneFolderPath": "AI_Employee_Vault/Done",
+    "statusFilePatterns": [
+      "task_status.json",
+      "completion_marker.txt",
+      "task_complete.flag"
+    ],
+    "completionLogPatterns": [
+      "Task completed",
+      "All tests completed",
+      "Email sent successfully",
+      "Process finished",
+      "Operation successful",
+      "Successfully completed"
+    ],
+    "fileWatchPatterns": [
+      "EMAIL_*.md",
+      "*complete*",
+      "*done*",
+      "*success*"
+    ],
+    "debug": false
+  }
+}

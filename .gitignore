@@ -1,0 +1,219 @@
+# ================================================
+# .gitignore for Silver-Tier LinkedIn Watcher
+# ================================================
+# Protect sensitive data and exclude unnecessary files
+# ================================================
+
+# ================================================
+# 🔒 SENSITIVE FILES (NEVER COMMIT)
+# ================================================
+
+# Environment variables (contains passwords, API keys)
+.env
+.env.local
+.env.*.local
+
+# Credentials files
+*credentials*.json
+*credential*.json
+gmail_credentials.json
+outlook_credentials.json
+token.json
+token.pickle
+
+# Session data (contains login cookies)
+linkedin_session/
+whatsapp_session/
+*_session/
+session_data/
+
+# API keys
+*api_key*
+*apikey*
+*secret*
+*password*
+
+# ================================================
+# 📊 LOG FILES (Dynamic, not needed in git)
+# ================================================
+
+# Application logs
+*.log
+linkedin_watcher.log
+whatsapp_watcher.log
+file_watcher.log
+gmail_watcher.log
+orchestrator.log
+mcp-email-server.log
+
+# Log directories
+Logs/
+logs/
+log/
+
+# ================================================
+# 📸 SCREENSHOTS & MEDIA (Generated files)
+# ================================================
+
+# Screenshots
+Screenshots/
+screenshots/
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.bmp
+!README_*.png
+
+# ================================================
+# 📁 DATA DIRECTORIES (User data)
+# ================================================
+
+# Vault data (personal LinkedIn/WhatsApp data)
+AI_Silver_Employee_Vault/
+vault/
+data/
+
+# Action files (generated during runtime)
+Needs_Action/
+Done/
+Pending_Approval/
+Approved/
+Plans/
+Inbox/
+
+# Posts (generated content)
+Posts/
+posts/
+
+# ================================================
+# 🗑️ TEMPORARY FILES
+# ================================================
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+.cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Python
+venv/
+env/
+.venv/
+.env/
+*.egg-info/
+dist/
+build/
+
+# ================================================
+# 💻 IDE & EDITOR FILES
+# ================================================
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Other editors
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+Thumbs.db
+
+# ================================================
+# 📦 PACKAGE FILES (Generated)
+# ================================================
+
+# Python
+*.egg/
+.eggs/
+
+# Node.js
+package-lock.json
+yarn.lock
+
+# ================================================
+# 🧪 TEST FILES (Optional - can keep if useful)
+# ================================================
+
+# Test outputs
+test_results/
+coverage/
+.coverage
+htmlcov/
+.pytest_cache/
+.tox/
+
+# Test data
+test_data/
+*.test
+*.spec
+
+# ================================================
+# 📝 DOCUMENTATION (Optional)
+# ================================================
+
+# Auto-generated docs
+docs/_build/
+site/
+
+# Large media files
+*.mp4
+*.mp3
+*.avi
+*.mov
+
+# ================================================
+# ✅ WHAT TO KEEP (Important files)
+# ================================================
+
+# Keep these files (don't ignore):
+# - .env.example (template for .env)
+# - requirements.txt (dependencies)
+# - package.json (node dependencies)
+# - *.py (source code)
+# - *.js (source code)
+# - *.md (documentation)
+# - README.md
+# - orchestrator.py
+# - linkedin_watcher.py
+# - whatsapp_watcher.py
+# - file_watcher.py
+# - gmail_watcher.py
+# - scheduler.py
+
+# ================================================
+# 🛡️ SECURITY NOTES
+# ================================================
+
+# BEFORE COMMITTING, CHECK:
+# 1. No .env file is committed
+# 2. No credentials files are committed
+# 3. No session data is committed
+# 4. No API keys or passwords in code
+# 5. No personal LinkedIn/WhatsApp data
+
+# ALWAYS COMMIT:
+# 1. Source code (.py, .js files)
+# 2. .env.example (template)
+# 3. requirements.txt
+# 4. README.md
+# 5. Configuration templates
+
+# ================================================
+# END OF .gitignore
+# ================================================

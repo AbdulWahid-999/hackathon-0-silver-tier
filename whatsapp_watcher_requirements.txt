@@ -1,0 +1,16 @@
+# WhatsApp Watcher Requirements
+
+# Selenium for web automation
+selenium==4.15.2
+
+# For session management (if needed)
+requests==2.31.0
+
+# For logging and monitoring
+loguru==0.7.2
+
+# For text processing (if needed)
+nltk==3.8.1
+
+# For date/time handling
+python-dateutil==2.8.2

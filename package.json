@@ -1,0 +1,35 @@
+{
+  "name": "mcp-email-server",
+  "version": "1.0.0",
+  "description": "MCP Email Server for Silver Tier Functional Assistant",
+  "main": "mcp-email-server.js",
+  "scripts": {
+    "start": "node mcp-email-server.js",
+    "dev": "node --watch mcp-email-server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mcp",
+    "email",
+    "server",
+    "nodemailer",
+    "winston",
+    "silver-tier"
+  ],
+  "author": "Silver Tier Functional Assistant",
+  "license": "MIT",
+  "dependencies": {
+    "nodemailer": "^6.9.7",
+    "winston": "^3.11.0",
+    "uuid": "^9.0.1",
+    "chokidar": "^3.5.3",
+    "js-yaml": "^4.0.0",
+    "ralph-wiggum-loop": "./ralph-wiggum-loop.js"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.10"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

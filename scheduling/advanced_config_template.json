@@ -1,0 +1,280 @@
+{
+  "tasks": [
+    {
+      "name": "Business Audit Report",
+      "script_path": "scheduling/tasks/business_audit.py",
+      "schedule_time": "02:00",
+      "frequency": "DAILY",
+      "enabled": true,
+      "description": "Generates comprehensive business audit reports",
+      "config": {
+        "data_dir": "data",
+        "reports_dir": "reports/business_audit",
+        "include_system_metrics": true,
+        "include_performance_data": true,
+        "include_security_analysis": true,
+        "email_recipients": ["admin@silver-tier.com"],
+        "thresholds": {
+          "cpu_alert": 80,
+          "memory_alert": 85,
+          "disk_alert": 90,
+          "response_time_alert": 2000,
+          "error_rate_alert": 10
+        },
+        "custom_metrics": {
+          "database_connections": {
+            "enabled": false,
+            "threshold": 100,
+            "check_interval": 300
+          },
+          "api_response_times": {
+            "enabled": true,
+            "endpoints": [
+              "http://localhost:8080/api/health",
+              "http://localhost:3000/api/status"
+            ],
+            "threshold": 1000
+          }
+        }
+      }
+    },
+    {
+      "name": "Dashboard Update",
+      "script_path": "scheduling/tasks/dashboard_update.py",
+      "schedule_time": "03:00",
+      "frequency": "DAILY",
+      "enabled": true,
+      "description": "Updates dashboard metrics and generates visualizations",
+      "config": {
+        "data_dir": "data",
+        "dashboard_dir": "dashboard",
+        "metrics": ["cpu_usage", "memory_usage", "disk_usage", "response_time", "error_rate", "user_activity", "business_metrics"],
+        "time_window": "24h",
+        "visualizations": ["line", "bar", "heatmap", "pie", "scatter"],
+        "output_formats": ["png", "json", "html"],
+        "advanced_settings": {
+          "auto_refresh": true,
+          "refresh_interval": 300,
+          "max_data_points": 1000,
+          "anomalies_detection": true,
+          "anomalies_threshold": 2.5
+        }
+      }
+    },
+    {
+      "name": "System Health Check",
+      "script_path": "scheduling/tasks/system_health_check.py",
+      "schedule_time": "04:00",
+      "frequency": "DAILY",
+      "enabled": true,
+      "description": "Performs comprehensive system health checks",
+      "config": {
+        "checks_dir": "health_checks",
+        "reports_dir": "reports/health",
+        "thresholds": {
+          "cpu_critical": 90,
+          "cpu_warning": 75,
+          "memory_critical": 90,
+          "memory_warning": 80,
+          "disk_critical": 90,
+          "disk_warning": 80,
+          "network_critical": 1000,
+          "network_warning": 500,
+          "load_average_critical": 5.0,
+          "load_average_warning": 3.0
+        },
+        "services": ["http://localhost:8080", "http://localhost:3000", "https://api.example.com/health"],
+        "email_recipients": ["admin@silver-tier.com", "devops@silver-tier.com"],
+        "max_log_size_mb": 100,
+        "max_temp_files": 1000,
+        "custom_checks": [
+          {
+            "name": "Database Health Check",
+            "enabled": false,
+            "type": "database",
+            "connection_string": "postgresql://user:pass@localhost/db",
+            "queries": ["SELECT 1"],
+            "threshold": 1000
+          },
+          {
+            "name": "Cache Health Check",
+            "enabled": true,
+            "type": "redis",
+            "host": "localhost",
+            "port": 6379,
+            "db": 0,
+            "threshold": 500
+          }
+        ]
+      }
+    },
+    {
+      "name": "Weekly Summary Report",
+      "script_path": "scheduling/tasks/weekly_summary.py",
+      "schedule_time": "23:59",
+      "frequency": "WEEKLY",
+      "enabled": true,
+      "description": "Generates comprehensive weekly summary reports",
+      "config": {
+        "data_dir": "data",
+        "reports_dir": "reports/weekly",
+        "include_business_metrics": true,
+        "include_system_metrics": true,
+        "include_user_activity": true,
+        "include_performance_trends": true,
+        "include_custom_analytics": true,
+        "email_recipients": ["admin@silver-tier.com", "manager@silver-tier.com"],
+        "week_start": "Monday",
+        "custom_analytics": {
+          "user_segmentation": {
+            "enabled": true,
+            "segments": ["active", "inactive", "new", "returning"],
+            "criteria": {
+              "active": {"min_logins": 5, "min_features": 3},
+              "inactive": {"max_days_since_last_login": 30}
+            }
+          },
+          "trend_analysis": {
+            "enabled": true,
+            "metrics": ["response_time", "error_rate", "user_growth"],
+            "comparison_periods": ["week_over_week", "month_over_month"]
+          }
+        }
+      }
+    },
+    {
+      "name": "Backup Task",
+      "script_path": "scheduling/tasks/backup.py",
+      "schedule_time": "01:00",
+      "frequency": "DAILY",
+      "enabled": true,
+      "description": "Automated backup of critical data",
+      "config": {
+        "backup_dir": "backups",
+        "source_dirs": ["data", "reports", "dashboard"],
+        "exclude_patterns": ["*.log", "*.tmp", "cache*"],
+        "retention_days": 30,
+        "compression": true,
+        "encryption": false,
+        "email_notifications": true,
+        "slack_notifications": false
+      }
+    },
+    {
+      "name": "Security Scan",
+      "script_path": "scheduling/tasks/security_scan.py",
+      "schedule_time": "05:00",
+      "frequency": "DAILY",
+      "enabled": false,
+      "description": "Daily security vulnerability scan",
+      "config": {
+        "scan_types": ["dependency", "code", "config", "network"],
+        "vulnerability_threshold": "medium",
+        "auto_remediation": false,
+        "report_recipients": ["security@silver-tier.com"],
+        "integration_api": {
+          "type": "webhook",
+          "url": "https://security.example.com/api/scan-results",
+          "auth_token": "${SECURITY_API_TOKEN}"
+        }
+      }
+    }
+  ],
+  "system": {
+    "log_level": "INFO",
+    "log_file": "logs/scheduler.log",
+    "retry_attempts": 3,
+    "retry_delay": 60,
+    "data_retention_days": 30,
+    "backup_enabled": true,
+    "backup_frequency": "DAILY",
+    "backup_time": "01:00",
+    "backup_dir": "backups",
+    "notification_settings": {
+      "enabled": true,
+      "email_notifications": true,
+      "slack_notifications": false,
+      "threshold_notifications": true,
+      "critical_only": false,
+      "channels": {
+        "email": ["admin@silver-tier.com", "devops@silver-tier.com"],
+        "slack": ["#alerts", "#monitoring"]
+      }
+    },
+    "monitoring": {
+      "cpu_threshold": 80,
+      "memory_threshold": 85,
+      "disk_threshold": 90,
+      "error_threshold": 5,
+      "health_score_threshold": 70,
+      "custom_metrics": {
+        "database_connections": {
+          "enabled": false,
+          "threshold": 100,
+          "check_interval": 300
+        },
+        "api_response_times": {
+          "enabled": true,
+          "endpoints": [
+            "http://localhost:8080/api/health",
+            "http://localhost:3000/api/status"
+          ],
+          "threshold": 1000
+        }
+      }
+    },
+    "security": {
+      "enabled": true,
+      "scan_frequency": "WEEKLY",
+      "scan_day": "Sunday",
+      "scan_time": "04:00",
+      "vulnerability_threshold": "medium",
+      "auto_remediation": false,
+      "integration_api": {
+        "type": "webhook",
+        "url": "https://security.example.com/api/scan-results",
+        "auth_token": "${SECURITY_API_TOKEN}"
+      }
+    },
+    "integrations": {
+      "email": {
+        "enabled": true,
+        "smtp_server": "smtp.gmail.com",
+        "port": 587,
+        "secure": false,
+        "username": "${EMAIL_USERNAME}",
+        "password": "${EMAIL_PASSWORD}"
+      },
+      "slack": {
+        "enabled": false,
+        "webhook_url": "${SLACK_WEBHOOK_URL}"
+      },
+      "discord": {
+        "enabled": false,
+        "webhook_url": "${DISCORD_WEBHOOK_URL}"
+      },
+      "teams": {
+        "enabled": false,
+        "webhook_url": "${TEAMS_WEBHOOK_URL}"
+      }
+    },
+    "performance": {
+      "optimization_enabled": true,
+      "cache_ttl": 300,
+      "max_concurrent_tasks": 5,
+      "task_timeout": 3600,
+      "resource_limits": {
+        "cpu_percent": 80,
+        "memory_mb": 2048,
+        "disk_mb": 1024
+      }
+    },
+    "disaster_recovery": {
+      "enabled": true,
+      "recovery_points": 3,
+      "recovery_interval_hours": 24,
+      "test_recovery_enabled": false,
+      "test_frequency": "MONTHLY"
+    }
+  }
+}
