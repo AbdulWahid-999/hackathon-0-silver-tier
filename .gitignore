@@ -70,9 +70,7 @@ screenshots/
 # ================================================
 
 # Vault data (personal LinkedIn/WhatsApp data)
-AI_Silver_Employee_Vault/
-vault/
-data/
+
 
 # Action files (generated during runtime)
 Needs_Action/

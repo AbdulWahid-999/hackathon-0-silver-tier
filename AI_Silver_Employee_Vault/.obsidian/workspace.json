@@ -1,0 +1,229 @@
+{
+  "main": {
+    "id": "6b4cad21f819965e",
+    "type": "split",
+    "children": [
+      {
+        "id": "d39ccbd2964bb5db",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8e9564b42fd8eb05",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "ad746bf39a6d59e2",
+    "type": "split",
+    "children": [
+      {
+        "id": "1d85d62dd91cd8b5",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "9672746129a9737e",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "721e30d0a16b83f0",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "9f84160e7f615c89",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "ade7af1d4853e3de",
+    "type": "split",
+    "children": [
+      {
+        "id": "b8ad4ced28d7495a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "babdb6da74e7c805",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": true,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": false
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "06fdd72be1c5e330",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "51b1c562d58eabdc",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "8393e2e4ca8e61a0",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": true,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "28b806596303c3a3",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "9672746129a9737e",
+  "lastOpenFiles": [
+    "linkedin_session/Default/Code Cache/js/1d83909fd7b91461_0",
+    "linkedin_session/Default/Code Cache/js/268441a15da446ef_0",
+    "linkedin_session/Default/Code Cache/js/b2a8b12ed562de67_0",
+    "linkedin_session/Default/Code Cache/js/62caa44236fc0132_0",
+    "linkedin_session/Default/Code Cache/js/7dc913955764a3ff_0",
+    "linkedin_session/Default/Code Cache/js/81a557c6e7d6f2bb_0",
+    "linkedin_session/Default/Code Cache/js/49f7575bf7260955_0",
+    "linkedin_session/Default/Code Cache/js/be92c5095cddd992_0",
+    "linkedin_session/Default/Code Cache/js/0ad6ce5ed2d5dc10_0",
+    "linkedin_session/Default/Code Cache/js/f9307d7fba372de7_0",
+    "linkedin_session/Default/blob_storage/d6a81bc2-b1f3-4bb4-ba36-52031c762bd5",
+    "Screenshots/post_page_20260228_124041.png",
+    "Screenshots/messages_page_20260228_123926.png",
+    "Screenshots/messaging_debug_20260301_225130.png",
+    "Screenshots/messages_20260301_175645.png",
+    "Screenshots/logged_in_20260301_175626.png",
+    "Needs_Action/LINKEDIN_READ_MESSAGE_Reply to conversation with_20260301_175120.md",
+    "Needs_Action/LINKEDIN_READ_MESSAGE_Kamran Awan_20260301_175120.md",
+    "Needs_Action/LINKEDIN_READ_MESSAGE_Status is online_20260301_175120.md",
+    "Needs_Action/LINKEDIN_READ_MESSAGE_Abdul waheed khatri_20260301_175120.md",
+    "Needs_Action/LINKEDIN_READ_MESSAGE_Status is reachable_20260301_175120.md",
+    "Screenshots/messages_20260301_175115.png",
+    "Screenshots/logged_in_20260301_175058.png",
+    "Screenshots/messages_page_20260301_175003.png",
+    "Screenshots/messages_page_20260301_174354.png",
+    "Screenshots/logged_in_20260301_174334.png",
+    "Needs_Action/LINKEDIN_READ_MESSAGE_Unknown_20260301_173354.md",
+    "Needs_Action/LINKEDIN_message_20260228_235509.md",
+    "Needs_Action/LINKEDIN_message_20260228_235211.md",
+    "Needs_Action/LINKEDIN_message_20260228_163136.md",
+    "Needs_Action/LINKEDIN_message_20260228_162435.md",
+    "Needs_Action/LINKEDIN_message_20260228_160018.md",
+    "Dashboard.md",
+    "Plans/plan_FILE_main.txt.md",
+    "Plans/plan_FILE_hello.txt.md",
+    "Company_Handbook.md",
+    "2026-02-23.md",
+    "2026-02-20.md",
+    "Untitled.canvas",
+    "2026-02-21.md",
+    "Needs_Action/FILE_main.txt.md",
+    "Needs_Action/FILE_hello.txt.md",
+    "Needs_Action/FILE_client.txt.md",
+    "Plans/README.md",
+    "Needs_Action/FILE_app.txt.md",
+    "Plans/plan_001_test_file_3.md",
+    "Done/FILE_test_file_3.txt.md"
+  ]
+}
